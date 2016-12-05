@@ -1,0 +1,43 @@
+Robot Framework on Centos 7
+===========================
+#update Firefox to 50
+su
+cd /usr/lib64
+mv firefox firefox-45
+wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/50.0/linux-x86_64/en-US/firefox-50.0.tar.bz2
+tar xvf firefox-50.0.tar.bz2 
+#install gecko driver
+cd /usr/lib64
+wget https://github.com/mozilla/geckodriver/releases/download/v0.11.1/geckodriver-v0.11.1-linux64.tar.gz
+tar -xvf geckodriver-v0.11.1-linux64.tar.gz
+ln -s /usr/lib/64/geckodriver /usr/bin/geckodriver
+exit
+#install Robot Framework
+python --version
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python get-pip.py
+sudo pip install robotframework
+sudo pip install robotframework-selenium2library
+sudo yum install -y git
+git clone https://bitbucket.org/robotframework/webdemo.git
+#Run demo
+cd webdemo
+python demoapp/server.py &
+robot login-tests
+
+=================================================================================================
+
+NOTE: tests can be disrupted by Firefox setup dialogues, which can happen after an update/install.
+NOTE: running a gui in a vm is not a good idea. May need to increase the wait time and/or memory allocated to the VM for the vm to enable the browser to respond in time for the framework.
+${DELAY}          0 in login_tests/resource.robot
+
+Instructions:
+
+Vagrant up
+Wait for provisioning to complete
+Use GUI to login - vagrant/vagrant
+open a terminal window
+
+cd webdemo
+python demoapp/server.py &
+robot login-tests/
